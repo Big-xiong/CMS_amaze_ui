@@ -1,0 +1,282 @@
+<!doctype html>
+<html class="no-js" ng-app="ngApp">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Amaze UI Admin table Examples</title>
+    <meta name="description" content="这是一个 table 页面">
+    <meta name="keywords" content="table">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="icon" type="image/png" href="assets/i/favicon.png">
+    <link rel="apple-touch-icon-precomposed" href="assets/i/app-icon72x72@2x.png">
+    <meta name="apple-mobile-web-app-title" content="Amaze UI" />
+    <link rel="stylesheet" href="assets/css/amazeui.min.css" />
+    <link rel="stylesheet" href="assets/css/admin.css">
+</head>
+<style>
+#topbar-collapse {
+    background-color: #000;
+}
+
+.am-topbar-brand {
+    color: #fff;
+}
+
+.am-text-primary {
+    color: #000;
+}
+</style>
+
+<body ng-controller="indexCtrl">
+    <!--[if lte IE 9]>
+<p class="browsehappy">你正在使用<strong>过时</strong>的浏览器，Amaze UI 暂不支持。 请 <a href="http://browsehappy.com/" target="_blank">升级浏览器</a>
+  以获得更好的体验！</p>
+<![endif]-->
+    <header class="am-topbar am-topbar-inverse admin-header">
+        <div class="am-topbar-brand">
+            <strong>耐克中国</strong> <small>后台管理系统</small>
+        </div>
+        <button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-success am-show-sm-only" data-am-collapse="{target: '#topbar-collapse'}"><span class="am-sr-only">导航切换</span> <span class="am-icon-bars"></span></button>
+        <div class="am-collapse am-topbar-collapse" id="topbar-collapse">
+            <ul class="am-nav am-nav-pills am-topbar-nav am-topbar-right admin-header-list">
+                <li class="am-dropdown" data-am-dropdown>
+                    <a class="am-dropdown-toggle" data-am-dropdown-toggle href="javascript:;">
+                        <span class="am-icon-users"></span> 管理员 <span class="am-icon-caret-down"></span>
+                    </a>
+                    <ul class="am-dropdown-content">
+                        <li><a href="#"><span class="am-icon-user"></span> 资料</a></li>
+                        <li><a href="#"><span class="am-icon-cog"></span> 设置</a></li>
+                        <li><a href="#"><span class="am-icon-power-off"></span> 退出</a></li>
+                    </ul>
+                </li>
+                <li class="am-hide-sm-only"><a href="javascript:;" id="admin-fullscreen"><span class="am-icon-arrows-alt"></span> <span class="admin-fullText">开启全屏</span></a></li>
+            </ul>
+        </div>
+    </header>
+    <div class="am-cf admin-main">
+        <!-- sidebar start -->
+        <div class="admin-sidebar am-offcanvas" id="admin-offcanvas">
+            <div class="am-offcanvas-bar admin-offcanvas-bar">
+                <ul class="am-list admin-sidebar-list">
+                    <li><a href="admin-index.html"><span class="am-icon-home"></span> 首页</a></li>
+                    <li><a href="admin-table.html"><span class="am-icon-table"></span> 表格</a></li>
+                    <li><a href="admin-form.html"><span class="am-icon-pencil-square-o"></span> 表单</a></li>
+                    <li><a href="#"><span class="am-icon-sign-out"></span> 注销</a></li>
+                </ul>
+                <div class="am-panel am-panel-default admin-sidebar-panel">
+                    <div class="am-panel-bd">
+                        <p><span class="am-icon-bookmark"></span> 公告</p>
+                        <p>just do it -耐克中国</p>
+                    </div>
+                </div>
+                <div class="am-panel am-panel-default admin-sidebar-panel">
+                    <div class="am-panel-bd">
+                        <p><span class="am-icon-tag"></span> wiki</p>
+                        <p>Welcome to the Nike中国!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- sidebar end -->
+        <!-- content start -->
+        <div class="admin-content">
+            <div class="admin-content-body">
+                <div class="am-cf am-padding am-padding-bottom-0">
+                    <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">商品数据</strong> / <small>List-table</small></div>
+                </div>
+                <hr>
+                <div class="am-g">
+                    <div class="am-u-sm-12 am-u-md-6">
+                        <div class="am-btn-toolbar">
+                            <div class="am-btn-group am-btn-group-xs">
+                                <button type="button" class="am-btn am-btn-default add"><span class="am-icon-plus"></span> 新增</button>
+                                <button type="button" class="am-btn am-btn-default"><span class="am-icon-save"></span> 保存</button>
+                                <button type="button" class="am-btn am-btn-default"><span class="am-icon-archive"></span> 审核</button>
+                                <button type="button" class="am-btn am-btn-default"><span class="am-icon-trash-o"></span> 删除</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="am-u-sm-12 am-u-md-3">
+                        <div class="am-form-group">
+                            <select data-am-selected="{btnSize: 'sm'}" ng-model="sortType">
+                                <option value="id">id</option>
+                                <option value="price">价格</option>
+                                <option value="del">折扣</option>
+                            </select>
+                        </div>
+                        <button ng-click="idx()">{{text[index]}}</button>
+                    </div>
+                    <div class="am-u-sm-12 am-u-md-3">
+                        <div class="am-input-group am-input-group-sm">
+                            <input type="text" class="am-form-field" ng-model="search">
+                            <span class="am-input-group-btn">
+            <button class="am-btn am-btn-default" type="button">搜索</button>
+          </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="am-g">
+                    <div class="am-u-sm-12">
+                        <table class="am-table am-table-striped am-table-hover table-main">
+                            <thead>
+                                <tr>
+                                    <th class="table-check">
+                                        <input type="checkbox" />
+                                    </th>
+                                    <th class="table-id">ID</th>
+                                    <th class="table-title">商品名称</th>
+                                    <th class="table-type">价格</th>
+                                    <th class="table-author am-hide-sm-only">折扣</th>
+                                    <th class="table-date am-hide-sm-only">修改日期</th>
+                                    <th class="table-set">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="goodsMsg" ng-repeat="g in goods|filter:search|orderBy:sortType:isSort|limitTo:count:(page-1)*count">
+                                    <td>
+                                        <input type="checkbox" />
+                                    </td>
+                                    <td>{{g.id}}</td>
+                                    <td><a href="#">{{g.title|show}}</a></td>
+                                    <td>{{g.price}}</td>
+                                    <td class="am-hide-sm-only">{{g.del}}</td>
+                                    <td class="am-hide-sm-only">2014年9月4日 7:28:47</td>
+                                    <td>
+                                        <div class="am-btn-toolbar">
+                                            <div class="am-btn-group am-btn-group-xs">
+                                                <button class="am-btn am-btn-default am-btn-xs am-text-secondary"><span class="am-icon-pencil-square-o"></span> 编辑</button>
+                                                <button class="am-btn am-btn-default am-btn-xs am-hide-sm-only detail"><span class="am-icon-copy"></span> 详情</button>
+                                                <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only del"><span class="am-icon-trash-o"></span> 删除</button>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="am-cf">
+                            共 <span class="total">15</span>条记录
+                            <div class="am-fr">
+                                <ul class="am-pagination">
+                                    <li ng-class="{'am-disabled':page==1}" ng-click="sub()"><a href="#">«</a></li>
+                                    <li ng-class="{'am-active':page==a}" ng-click="change(a)" ng-repeat="a in arr"><a href="#">{{a}}</a></li>
+                                    <li ng-class="{'am-disabled':page==pageCount}" ng-click="add()"><a href="#">»</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <hr />
+                        <p>注：.....</p>
+                    </div>
+                </div>
+            </div>
+            <footer class="admin-content-footer">
+                <hr>
+                <p class="am-padding-left">© 2014 AllMobilize, Inc. Licensed under MIT license.</p>
+            </footer>
+        </div>
+        <!-- content end -->
+    </div>
+    <a href="#" class="am-icon-btn am-icon-th-list am-show-sm-only admin-menu" data-am-offcanvas="{target: '#admin-offcanvas'}"></a>
+    <footer>
+        <hr>
+        <p class="am-padding-left">© 2014 AllMobilize, Inc. Licensed under MIT license.</p>
+    </footer>
+    <!--[if lt IE 9]>
+<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="assets/js/amazeui.ie8polyfill.min.js"></script>
+<![endif]-->
+    <!--[if (gte IE 9)|!(IE)]><!-->
+    <script src="assets/js/jquery.js"></script>
+    <!--<![endif]-->
+    <script src="assets/js/amazeui.min.js"></script>
+    <script src="assets/js/app.js"></script>
+    <script src="js/angular.js"></script>
+    <script>
+    var app = angular.module('ngApp', []);
+    app.controller('indexCtrl', function($http, $scope,tool,$rootScope) {
+        $scope.text = ['升序', '降序'];
+        $scope.index = 0;
+        $scope.isSort = true;
+        $scope.idx = function() {
+            if ($scope.index === 1) {
+                $scope.isSort = true;
+                $scope.index = 0;
+            } else if ($scope.index === 0) {
+                $scope.isSort = false;
+                $scope.index = 1;
+            }
+        }
+        $scope.count = 15;
+        $rootScope.pageCount = 0;
+        $rootScope.arr = [];
+        $scope.page = 1;
+        $scope.sortType = "id";
+        $scope.search = "";
+        $scope.length = 0;
+        $scope.change = function(page) {
+            $scope.page = page;
+        }
+        $scope.sub = function() {
+            $scope.page--;
+            if ($scope.page <= 1) {
+                $scope.page = 1;
+            }
+        }
+        $scope.add = function() {
+            $scope.page++;
+            if ($scope.page >= $rootScope.pageCount) {
+                $scope.page = $rootScope.pageCount;
+            }
+        }
+        $http({
+            method: 'GET',
+            url: 'http://localhost:520/'
+        }).then(function(data) {
+            $scope.goods = data.data;
+            // $scope.pageCount = Math.ceil(data.data.length / $scope.count)
+            // for (var i = 1; i <= $scope.pageCount; i++) {
+            //     $scope.arr.push(i);
+            // }
+            // console.log($scope.arr);
+            tool.totalPage(Math.ceil(data.data.length / $scope.count));
+        });
+    });
+    app.service('tool', function($rootScope) {
+        return {
+            totalPage: function(data) {
+                $rootScope.pageCount = data;
+                for (var i = 1; i <= $rootScope.pageCount; i++) {
+                    $rootScope.arr.push(i);
+                }
+                console.log($rootScope.arr);
+            }
+        }
+
+    });
+    app.filter('show', function() {
+        return function(input) {
+            if (input.length < 10) {
+                return input
+            } else {
+                return input.slice(0, 9) + '...';
+            }
+        }
+    });
+    // app.filter('searchTotal', function($rootScope,tool) {
+    //     return function(input) {
+    //         console.log(input);
+    //         // $rootScope.pageCount = input.length;
+    //         // for (var i = 1; i <= $rootScope.pageCount; i++) {
+    //         //     $rootScope.arr.push(i);
+    //         // }
+    //         // tool.totalPage(input.length) 
+    //         // return input
+    //     }
+    // });
+    </script>
+</body>
+
+</html>
